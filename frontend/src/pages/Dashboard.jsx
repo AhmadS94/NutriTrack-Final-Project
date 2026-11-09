@@ -14,7 +14,7 @@ function Dashboard() {
     <div style={{ padding: "30px" }}>
       <h1>Welcome to NutriTrack 🥗</h1>
 
-      <p>Your nutrition dashboard is coming soon!</p>
+      <p>The nutrition dashboard is coming soon!</p>
 
       <button onClick={handleLogout}>
         Logout

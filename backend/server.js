@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
 const authMiddleware = require("./middleware/authMiddleware");
 const roleMiddleware = require("./middleware/roleMiddleware");
+
+const profileRoutes = require("./routes/profileRoutes");
+
 const cors = require("cors");
 
 const app = express();
@@ -17,6 +20,8 @@ app.use(
   }),
 );
 app.use("/api/auth", authRoutes);
+
+app.use("/api/profile", profileRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ message: "NutriTrack API is running!" });
