@@ -27,6 +27,34 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin", "dietitian"],
       default: "user",
     },
+
+    age: {
+      type: Number,
+      min: 1,
+      max: 120,
+    },
+
+    height: {
+      type: Number,
+      min: 50,
+      max: 250,
+    },
+
+    weight: {
+      type: Number,
+      min: 1,
+      max: 500,
+    },
+
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+    },
+
+    activityLevel: {
+      type: String,
+      enum: ["sedentary", "lightly_active", "moderately_active", "very_active"],
+    },
   },
   { timestamps: true },
 );
