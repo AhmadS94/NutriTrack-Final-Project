@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AddMeal from "./pages/AddMeal";
 
 import Profile from "./pages/Profile";
+import DailyMeals from "./pages/DailyMeals";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
   }
 />
 <Route path="/add-meal" element={<AddMeal />} />
+<Route path="/daily-meals" element={<DailyMeals />} />
       </Routes>
     </BrowserRouter>
   );
