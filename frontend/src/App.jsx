@@ -6,6 +6,9 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import Profile from "./pages/Profile";
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +27,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );

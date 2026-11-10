@@ -1,6 +1,6 @@
 
-import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/auth";
+import { Link, useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -15,6 +15,9 @@ function Dashboard() {
       <h1>Welcome to NutriTrack 🥗</h1>
 
       <p>The nutrition dashboard is coming soon!</p>
+      <Link to="/profile">
+  <button type="button">My Profile</button>
+</Link>
 
       <button onClick={handleLogout}>
         Logout
