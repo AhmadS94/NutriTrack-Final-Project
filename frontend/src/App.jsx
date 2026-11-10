@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AddMeal from "./pages/AddMeal";
 
 import Profile from "./pages/Profile";
 
@@ -35,6 +36,7 @@ function App() {
     </ProtectedRoute>
   }
 />
+<Route path="/add-meal" element={<AddMeal />} />
       </Routes>
     </BrowserRouter>
   );
