@@ -55,6 +55,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["sedentary", "lightly_active", "moderately_active", "very_active"],
     },
+
+    dailyCalorieGoal: {
+      type: Number,
+      min: 500,
+      max: 10000,
+      default: 2000,
+    },
   },
   { timestamps: true },
 );

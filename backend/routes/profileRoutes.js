@@ -31,6 +31,7 @@ router.put("/", authMiddleware, async (req, res) => {
       "weight",
       "gender",
       "activityLevel",
+      "dailyCalorieGoal",
     ];
 
     const updates = {};

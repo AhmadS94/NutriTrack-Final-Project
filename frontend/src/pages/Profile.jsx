@@ -11,6 +11,7 @@ function Profile() {
     weight: "",
     gender: "",
     activityLevel: "",
+    dailyCalorieGoal: 2000,
   });
 
   const [loading, setLoading] = useState(true);
@@ -44,6 +45,7 @@ function Profile() {
           weight: data.weight ?? "",
           gender: data.gender ?? "",
           activityLevel: data.activityLevel ?? "",
+          dailyCalorieGoal: data.dailyCalorieGoal ?? 2000,
         });
       } catch (err) {
         setError(err.message);
@@ -78,6 +80,7 @@ function Profile() {
         weight: form.weight === "" ? null : Number(form.weight),
         gender: form.gender || null,
         activityLevel: form.activityLevel || null,
+        dailyCalorieGoal: Number(form.dailyCalorieGoal),
       };
 
       const response = await fetch(
@@ -119,8 +122,13 @@ function Profile() {
     <div style={{ maxWidth: "500px", margin: "40px auto" }}>
       <h1>My Profile</h1>
 
-      <p><strong>Name:</strong> {profile.name}</p>
-      <p><strong>Email:</strong> {profile.email}</p>
+      <p>
+        <strong>Name:</strong> {profile.name}
+      </p>
+
+      <p>
+        <strong>Email:</strong> {profile.email}
+      </p>
 
       <h2>Edit Profile</h2>
 
@@ -181,7 +189,9 @@ function Profile() {
         </div>
 
         <div>
-          <label htmlFor="activityLevel">Activity Level</label>
+          <label htmlFor="activityLevel">
+            Activity Level
+          </label>
           <select
             id="activityLevel"
             name="activityLevel"
@@ -189,7 +199,9 @@ function Profile() {
             onChange={handleChange}
           >
             <option value="">Select activity level</option>
-            <option value="sedentary">Sedentary</option>
+            <option value="sedentary">
+              Sedentary
+            </option>
             <option value="lightly_active">
               Lightly Active
             </option>
@@ -202,13 +214,35 @@ function Profile() {
           </select>
         </div>
 
+        <div>
+          <label htmlFor="dailyCalorieGoal">
+            Daily Calorie Goal (kcal)
+          </label>
+          <input
+            id="dailyCalorieGoal"
+            type="number"
+            name="dailyCalorieGoal"
+            min="500"
+            max="10000"
+            step="1"
+            required
+            value={form.dailyCalorieGoal}
+            onChange={handleChange}
+          />
+        </div>
+
         <button type="submit" disabled={saving}>
           {saving ? "Saving..." : "Save Profile"}
         </button>
       </form>
 
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {message && (
+        <p style={{ color: "green" }}>{message}</p>
+      )}
+
+      {error && (
+        <p style={{ color: "red" }}>{error}</p>
+      )}
     </div>
   );
 }
