@@ -189,7 +189,9 @@ function Dashboard() {
 
       <h3>Appointments</h3>
       <p>Book appointments with dietitians.</p>
-      <p>Coming Soon</p>
+      <Link to="/appointments">
+        Book Appointment
+      </Link>
     </div>
   );
 }
