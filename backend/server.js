@@ -12,6 +12,9 @@ const profileRoutes = require("./routes/profileRoutes");
 const mealRoutes = require("./routes/mealRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 
+// AI Routes - Ollama
+const aiRoutes = require("./routes/aiRoutes");
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -29,6 +32,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/meals", mealRoutes);
 app.use("/api/appointments", appointmentRoutes);
+
+// AI Meal Suggestions
+app.use("/api/ai", aiRoutes);
 
 // Health Check
 app.get("/api/health", (req, res) => {

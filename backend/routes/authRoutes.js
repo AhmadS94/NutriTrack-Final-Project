@@ -5,14 +5,32 @@ const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
+// REGISTER
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
-    // Check required fields
-    if (!name || !email || !password) {
+    // Validate required fields
+    if (
+      typeof name !== "string" ||
+      typeof email !== "string" ||
+      typeof password !== "string" ||
+      !name.trim() ||
+      !email.trim() ||
+      !password
+    ) {
       return res.status(400).json({
         message: "Name, email, and password are required",
+      });
+    }
+
+    // Only allow public registration as user or dietitian
+    const allowedRoles = ["user", "dietitian"];
+    const selectedRole = role === undefined ? "user" : role;
+
+    if (!allowedRoles.includes(selectedRole)) {
+      return res.status(400).json({
+        message: "Please select a valid account type",
       });
     }
 
@@ -33,16 +51,16 @@ router.post("/register", async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Create account with selected role
     const user = await User.create({
-      name,
+      name: name.trim(),
       email: normalizedEmail,
       password: hashedPassword,
-      role: "user",
+      role: selectedRole,
     });
 
     return res.status(201).json({
-      message: "User registered successfully",
+      message: "Account registered successfully",
       user: {
         id: user._id,
         name: user.name,
@@ -57,6 +75,12 @@ router.post("/register", async (req, res) => {
       });
     }
 
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        message: "Invalid registration data",
+      });
+    }
+
     console.error("Register error:", error.message);
 
     return res.status(500).json({
@@ -65,6 +89,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// LOGIN
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -108,7 +133,10 @@ router.post("/login", async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h", algorithm: "HS256" },
+      {
+        expiresIn: "1h",
+        algorithm: "HS256",
+      },
     );
 
     return res.status(200).json({

@@ -11,12 +11,16 @@ router.get("/", authMiddleware, async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
 
-    res.json(user);
+    return res.json(user);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch profile" });
+    return res.status(500).json({
+      message: "Failed to fetch profile",
+    });
   }
 });
 
@@ -48,12 +52,85 @@ router.put("/", authMiddleware, async (req, res) => {
     }).select("-password");
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
 
-    res.json(user);
+    return res.json(user);
   } catch (error) {
-    res.status(400).json({ message: "Failed to update profile" });
+    return res.status(400).json({
+      message: "Failed to update profile",
+    });
+  }
+});
+
+// PUT /api/profile/location
+// Save the logged-in user's location
+router.put("/location", authMiddleware, async (req, res) => {
+  try {
+    const { latitude, longitude, address } = req.body;
+
+    // Validate coordinates
+    if (
+      typeof latitude !== "number" ||
+      typeof longitude !== "number" ||
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      latitude < -90 ||
+      latitude > 90 ||
+      longitude < -180 ||
+      longitude > 180
+    ) {
+      return res.status(400).json({
+        message: "Invalid latitude or longitude",
+      });
+    }
+
+    // Validate optional address
+    if (
+      address !== undefined &&
+      (typeof address !== "string" || address.length > 300)
+    ) {
+      return res.status(400).json({
+        message: "Invalid address",
+      });
+    }
+
+    const location = {
+      latitude,
+      longitude,
+      address: address?.trim() || "",
+    };
+
+    // Update only the logged-in user's location
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $set: {
+          location,
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    return res.json({
+      message: "Location saved successfully",
+      location: user.location,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to save location",
+    });
   }
 });
 

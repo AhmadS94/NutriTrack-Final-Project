@@ -100,14 +100,44 @@ router.get("/my", async (req, res) => {
 });
 
 // GET /api/appointments/dietitians
-// List dietitians available for selection
+// List dietitians and their clinic locations
 router.get("/dietitians", async (req, res) => {
   try {
     const dietitians = await User.find({
       role: "dietitian",
-    }).select("name email");
+    })
+      .select("name email location")
+      .lean();
 
-    res.json(dietitians);
+    const result = dietitians.map((dietitian) => {
+      const location = dietitian.location;
+
+      const hasValidLocation =
+        location &&
+        typeof location.latitude === "number" &&
+        Number.isFinite(location.latitude) &&
+        location.latitude >= -90 &&
+        location.latitude <= 90 &&
+        typeof location.longitude === "number" &&
+        Number.isFinite(location.longitude) &&
+        location.longitude >= -180 &&
+        location.longitude <= 180;
+
+      return {
+        _id: dietitian._id,
+        name: dietitian.name,
+        email: dietitian.email,
+        location: hasValidLocation
+          ? {
+              latitude: location.latitude,
+              longitude: location.longitude,
+              address: location.address || "",
+            }
+          : null,
+      };
+    });
+
+    res.json(result);
   } catch (error) {
     res.status(500).json({
       message: "Failed to load dietitians",
