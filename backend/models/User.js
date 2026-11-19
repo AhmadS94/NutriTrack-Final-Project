@@ -62,6 +62,27 @@ const userSchema = new mongoose.Schema(
       max: 10000,
       default: 2000,
     },
+
+    // Location for users and dietitians
+    location: {
+      latitude: {
+        type: Number,
+        min: -90,
+        max: 90,
+      },
+
+      longitude: {
+        type: Number,
+        min: -180,
+        max: 180,
+      },
+
+      address: {
+        type: String,
+        trim: true,
+        maxlength: 300,
+      },
+    },
   },
   { timestamps: true },
 );
